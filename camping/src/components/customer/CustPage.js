@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-function CustPage() {}
+const CustPage = () => {};
 
 export default CustPage;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-function SiteRegisterPage() {}
+const SiteRegisterPage = () => {};
 
 export default SiteRegisterPage;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-function CampDetailPage() {}
+const CampDetailPage = () => {};
 
 export default CampDetailPage;
