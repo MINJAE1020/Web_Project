@@ -19,7 +19,11 @@ const LoginPage = () => {
             if (response.data.message === "로그인 성공") {
                 alert("로그인 성공");
                 localStorage.setItem("user_id", user_id);
-                // navigate("/home");
+                if (response.data.user_type === "cust") {
+                    navigate("/camp_home");
+                } else if (response.data.user_type === "host") {
+                    navigate("/host");
+                }
             } else {
                 alert("로그인 실패: " + response.data.message);
             }
@@ -55,7 +59,7 @@ const LoginPage = () => {
                 </form>
                 <p className="message">
                     <button onClick={handleRegister} style={{ color: "black" }}>
-                        sign_up
+                        sign_up_page
                     </button>
                 </p>
             </div>

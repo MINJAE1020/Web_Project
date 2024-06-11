@@ -11,6 +11,11 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!user_type) {
+            alert("사용자 유형을 선택해주세요.");
+            return;
+        }
+
         try {
             const response = await axios.post("http://localhost:8080/signup", {
                 user_id,
