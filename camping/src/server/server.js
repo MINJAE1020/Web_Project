@@ -5,7 +5,7 @@ const cors = require("cors");
 const cron = require("cron");
 const axios = require("axios");
 const app = express();
-const port = 3001;
+const port = 8080;
 require("dotenv").config();
 
 app.use(express.json());
@@ -17,6 +17,49 @@ const db = mysql.createPool({
     password: "1234",
     database: "camping",
     port: 3306,
+});
+
+app.post("/login", async (req, res) => {
+    const { user_id, user_pw } = req.body;
+
+    try {
+        const [rows] = await db.query(
+            "SELECT * FROM user WHERE user_id = ? AND user_pw = ?",
+            [user_id, user_pw]
+        );
+        if (rows.length > 0) {
+            return res
+                .status(200)
+                .json({ message: "로그인 성공", user_id: user_id });
+        } else {
+            return res.status(401).json({ message: "로그인 실패" });
+        }
+    } catch (error) {
+        console.error("로그인 에러", error);
+        return res.status(500).json({ message: "로그인 에러" });
+    }
+});
+
+app.post("/signup", async (req, res) => {
+    const { user_id, user_pw } = req.body;
+
+    try {
+        const [rows] = await db.query("SELECT * FROM user WHERE user_id = ?", [
+            user_id,
+        ]);
+        if (rows.length > 0) {
+            return res.status(409).json({ message: "중복된 아이디입니다." });
+        }
+
+        await db.query("INSERT INTO user (user_id, user_pw) VALUES (?, ?)", [
+            user_id,
+            user_pw,
+        ]);
+        return res.status(201).json({ message: "회원가입 성공" });
+    } catch (error) {
+        console.error("회원가입 에러:", error);
+        return res.status(500).json({ message: "회원가입 에러" });
+    }
 });
 
 app.listen(port, () => {
