@@ -41,7 +41,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-    const { user_id, user_pw } = req.body;
+    const { user_id, user_pw, user_type } = req.body;
 
     try {
         const [rows] = await db.query("SELECT * FROM user WHERE user_id = ?", [
@@ -51,10 +51,10 @@ app.post("/signup", async (req, res) => {
             return res.status(409).json({ message: "중복된 아이디입니다." });
         }
 
-        await db.query("INSERT INTO user (user_id, user_pw) VALUES (?, ?)", [
-            user_id,
-            user_pw,
-        ]);
+        await db.query(
+            "INSERT INTO user (user_id, user_pw, user_type) VALUES (?, ?, ?)",
+            [user_id, user_pw, user_type]
+        );
         return res.status(201).json({ message: "회원가입 성공" });
     } catch (error) {
         console.error("회원가입 에러:", error);
