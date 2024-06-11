@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // BrowserRouter와 Routes로 변경
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/camp_home" element={<LoginForm />} />
+                <Route path="/camp_detail" element={<LoginForm />} />
+                <Route path="/camp_book" element={<LoginForm />} />
+                <Route path="/cust" element={<LoginForm />} />
+                <Route path="/camp_register" element={<LoginForm />} />
+                <Route path="/site_register" element={<LoginForm />} />
+                <Route path="/host" element={<LoginForm />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/signup" element={<LoginForm />} />
+                <Route path="/review" element={<LoginForm />} />
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
