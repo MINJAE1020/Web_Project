@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const SignupPage = () => {
+function SignupPage() {
     const [user_id, setId] = useState("");
     const [user_pw, setPw] = useState("");
     const [user_type, setUserType] = useState("");
@@ -66,6 +66,6 @@ const SignupPage = () => {
             </div>
         </form>
     );
-};
+}
 
 export default SignupPage;

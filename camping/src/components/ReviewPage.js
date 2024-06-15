@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-const ReviewPage = () => {};
+function ReviewPage() {}
 
 export default ReviewPage;

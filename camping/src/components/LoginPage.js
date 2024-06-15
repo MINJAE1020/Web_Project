@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const LoginPage = () => {
+function LoginPage() {
     const [user_id, setId] = useState("");
     const [user_pw, setPw] = useState("");
     const [textInput, setTextInput] = useState("");
@@ -66,6 +66,6 @@ const LoginPage = () => {
             </div>
         </div>
     );
-};
+}
 
 export default LoginPage;
