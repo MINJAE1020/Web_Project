@@ -5,7 +5,6 @@ import axios from "axios";
 function LoginPage() {
     const [user_id, setId] = useState("");
     const [user_pw, setPw] = useState("");
-    const [textInput, setTextInput] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {

@@ -11,10 +11,11 @@ function CampBookPage() {
     );
 
     const [user_id, setUserId] = useState("user1"); // Example user_id
-    const [personnel, setPersonnel] = useState({ adults: 1, children: 0 });
+    const [adults, setAdults] = useState(0);
+    const [children, setChildren] = useState(0);
     const [check_in_date, setCheckInDate] = useState("");
     const [check_out_date, setCheckOutDate] = useState("");
-    const [book_status, setBookStatus] = useState("예약");
+    const [book_status, setBookStatus] = useState("예약대기");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,14 +23,11 @@ function CampBookPage() {
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
+        const formattedToday = today.toISOString().split("T")[0];
         const formattedTomorrow = tomorrow.toISOString().split("T")[0];
-        setCheckInDate(today.toISOString().split("T")[0]);
+        setCheckInDate(formattedToday);
         setCheckOutDate(formattedTomorrow);
     }, []);
-
-    const handlePersonnelChange = (type, value) => {
-        setPersonnel((prev) => ({ ...prev, [type]: value }));
-    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -79,25 +77,15 @@ function CampBookPage() {
                     <input
                         type="number"
                         min="1"
-                        value={personnel.adults}
-                        onChange={(e) =>
-                            handlePersonnelChange(
-                                "adults",
-                                parseInt(e.target.value)
-                            )
-                        }
+                        value={adults}
+                        onChange={(e) => setAdults(parseInt(e.target.value))}
                     />
                     <label>어린이</label>
                     <input
                         type="number"
                         min="0"
-                        value={personnel.children}
-                        onChange={(e) =>
-                            handlePersonnelChange(
-                                "children",
-                                parseInt(e.target.value)
-                            )
-                        }
+                        value={children}
+                        onChange={(e) => setChildren(parseInt(e.target.value))}
                     />
                 </div>
                 <div className="date-selection">
