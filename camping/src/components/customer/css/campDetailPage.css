@@ -3,35 +3,34 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-  }
-  
-  .mainImage {
+}
+
+.mainImage {
     width: 100%;
     max-width: 800px;
     height: auto;
     margin-bottom: 20px;
-  }
-  
-  .campInfo {
+}
+
+.campInfo {
     width: 100%;
     max-width: 800px;
-  }
-  
-  .sitesContainer {
+}
+
+.sitesContainer {
     display: flex;
     justify-content: space-between;
-  }
-  
-  .site {
+}
+
+.site {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .siteImage {
+}
+
+.siteImage {
     width: 100%;
     max-width: 400px;
     height: auto;
     margin-bottom: 10px;
-  }
-  
+}

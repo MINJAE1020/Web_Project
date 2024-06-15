@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-const CampRegisterPage = () => {};
+function CampRegisterPage() {}
 
 export default CampRegisterPage;

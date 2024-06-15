@@ -1,5 +1,5 @@
 import React, { useState } from "react";
 
-const HostPage = () => {};
+function HostPage() {}
 
 export default HostPage;

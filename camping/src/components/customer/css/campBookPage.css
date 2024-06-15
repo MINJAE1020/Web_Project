@@ -6,69 +6,69 @@
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-  }
-  
-  .header {
+}
+
+.header {
     text-align: center;
     font-size: 24px;
     margin-bottom: 20px;
     color: #333;
-  }
-  
-  .booking-form {
+}
+
+.booking-form {
     display: flex;
     flex-direction: column;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 15px;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
     color: #555;
-  }
-  
-  .form-group input {
+}
+
+.form-group input {
     width: 95%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 5px;
     transition: border-color 0.3s ease-in-out;
-  }
-  
-  .form-group input:focus {
+}
+
+.form-group input:focus {
     border-color: #007bff;
-  }
-  .personnel-selection,
+}
+.personnel-selection,
 .date-selection {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .personnel-selection label,
 .date-selection label {
-  display: block;
-  margin-bottom: 5px;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .personnel-selection input,
 .date-selection input {
-  width: calc(50% - 10px);
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 10px;
-}
-  
-  .date-input {
     width: calc(50% - 10px);
-  }
-  
-  button {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.date-input {
+    width: calc(50% - 10px);
+}
+
+button {
     padding: 12px 20px;
     font-size: 16px;
     color: #fff;
@@ -77,20 +77,19 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
-  }
-  
-  button:hover {
+}
+
+button:hover {
     background-color: #0056b3;
-  }
-  
-  button:focus {
+}
+
+button:focus {
     outline: none;
-  }
-  
-  @media (max-width: 600px) {
+}
+
+@media (max-width: 600px) {
     .date-input {
-      width: 100%;
-      margin-bottom: 10px;
+        width: 100%;
+        margin-bottom: 10px;
     }
-  }
-  
+}
