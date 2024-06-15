@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // BrowserRouter와 Routes로 변경
 import CampHomePage from "./components/customer/CampHomePage";
 import CustPage from "./components/customer/CustPage";
+import CampBookPage from "./components/customer/CampBookPage";
 import CampDetailPage from "./components/customer/CampDetailPage";
 import CampRegisterPage from "./components/host/CampRegisterPage";
 import SiteRegisterPage from "./components/host/SiteRegisterPage";
@@ -15,8 +16,8 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/camp_home" element={<CampHomePage />} />
-                <Route path="/camp_detail" element={<CampDetailPage />} />
-                <Route path="/camp_book" element={<CampDetailPage />} />
+                <Route path="/camp_detail/:id" element={<CampDetailPage />} />
+                <Route path="/camp_book/:camp_id" element={<CampBookPage />} />
                 <Route path="/cust" element={<CustPage />} />
                 <Route path="/camp_register" element={<CampRegisterPage />} />
                 <Route path="/site_register" element={<SiteRegisterPage />} />
