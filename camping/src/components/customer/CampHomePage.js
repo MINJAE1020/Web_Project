@@ -84,7 +84,9 @@ function CampHomePage() {
 
     return (
         <div className="container">
+            <header>
             <h1 className="header">여긴 어디?</h1>
+            </header>
             <div className="search-box">
                 <input
                     type="text"
@@ -129,6 +131,7 @@ function CampHomePage() {
                     Search
                 </button>
             </div>
+
             <ul className="campsite-list">
                 {console.log("렌더링할 캠프 데이터:", filteredCampsites)}
                 {filteredCampsites.map((campsite) => (

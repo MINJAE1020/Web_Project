@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./css/signup.css"
 
 function SignupPage() {
     const [user_id, setId] = useState("");
@@ -36,7 +37,7 @@ function SignupPage() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="signup-form">
             <div>
                 <input
                     type="text"
