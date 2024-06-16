@@ -338,6 +338,67 @@ app.get("/camps", async (req, res) => {
     }
 });
 
+app.get("/camps_view/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const [rows] = await db.query("SELECT * FROM camp WHERE host_id = ?", [
+            userId,
+        ]);
+
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("캠프 정보 조회 에러:", error);
+        return res.status(500).json({ message: "캠프 정보 조회 에러" });
+    }
+});
+
+app.put("/camp_update/:campId", async (req, res) => {
+    const { campId } = req.params;
+    const {
+        camp_name,
+        camp_type,
+        camp_address,
+        Information,
+        facility,
+        environment,
+        start_manner,
+        over_manner,
+        contact,
+        introduction,
+        check_in_time,
+        check_out_time,
+    } = req.body;
+
+    try {
+        await db.query(
+            "UPDATE camp SET camp_name = ?, camp_type = ?, camp_address = ?, Information = ?, facility = ?, environment = ?, start_manner = ?, over_manner = ?, contact = ?, introduction = ?, check_in_time = ?, check_out_time = ? WHERE camp_id = ?",
+            [
+                camp_name,
+                camp_type,
+                camp_address,
+                Information,
+                facility,
+                environment,
+                start_manner,
+                over_manner,
+                contact,
+                introduction,
+                check_in_time,
+                check_out_time,
+                campId,
+            ]
+        );
+
+        return res
+            .status(200)
+            .json({ message: "캠프 정보가 업데이트되었습니다." });
+    } catch (error) {
+        console.error("캠프 정보 업데이트 에러:", error);
+        return res.status(500).json({ message: "캠프 정보 업데이트 에러" });
+    }
+});
+
 app.post("/site_register_detail", upload.single("image"), async (req, res) => {
     const { camp_id, price, capacity } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
