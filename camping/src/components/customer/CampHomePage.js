@@ -111,6 +111,7 @@ function CampHomePage() {
                     <option value="캠핑">캠핑</option>
                     <option value="글램핑">글램핑</option>
                     <option value="카라반">카라반</option>
+                    <option value="펜션">펜션</option>
                 </select>
                 <div className="date-inputs">
                     <input
@@ -128,7 +129,7 @@ function CampHomePage() {
                     />
                 </div>
                 <button onClick={handleSearch} className="search-button">
-                    Search
+                    검색
                 </button>
             </div>
 

@@ -55,16 +55,12 @@ function CustPage() {
 
     return (
         <div className="container">
-            <h1 className="header">My Page</h1>
-            <h1 className="header">로그인 한 user: {userId}</h1>
+            <h1 className="header">{userId}님, My Page</h1>
+            <h2>내 예약</h2>
             <div className="bookings-section">
-                <h2>내 예약</h2>
                 {bookings.length > 0 ? (
                     bookings.map((booking) => (
                         <div key={booking.book_id} className="booking">
-                            <p>
-                                <strong>예약 ID:</strong> {booking.book_id}
-                            </p>
                             <p>
                                 <strong>캠핑장 ID:</strong> {booking.camp_id}
                             </p>
