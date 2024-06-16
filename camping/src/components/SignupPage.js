@@ -63,7 +63,7 @@ function SignupPage() {
                 <option value="host">호스트</option>
             </select>
             <div>
-                <button type="submit">sign_up</button>
+                <button type="submit">회원가입</button>
             </div>
         </form>
     );
