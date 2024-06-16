@@ -17,6 +17,9 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
 
+// 정적 파일 제공
+app.use("/uploads", express.static(uploadDir));
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadDir);
@@ -100,7 +103,7 @@ app.post("/camp_register", upload.array("images", 10), async (req, res) => {
         check_out_time,
     } = req.body;
 
-    const imagePaths = req.files.map((file) => file.path);
+    const imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
 
     try {
         await db.query(
@@ -226,7 +229,7 @@ app.get("/camps", async (req, res) => {
 
 app.post("/site_register_detail", upload.single("image"), async (req, res) => {
     const { camp_id, price, capacity } = req.body;
-    const image = req.file ? req.file.path : null;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     try {
         await db.query(
@@ -237,6 +240,40 @@ app.post("/site_register_detail", upload.single("image"), async (req, res) => {
     } catch (error) {
         console.error("사이트 등록 에러:", error);
         return res.status(500).json({ message: "사이트 등록 에러" });
+    }
+});
+
+app.get("/site_views/:campId", async (req, res) => {
+    const { campId } = req.params;
+
+    try {
+        const [rows] = await db.query("SELECT * FROM site WHERE camp_id = ?", [
+            campId,
+        ]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("사이트 조회 중 오류:", error);
+        return res.status(500).json({ message: "사이트 조회 중 오류" });
+    }
+});
+
+app.delete("/site_delete/:siteId", async (req, res) => {
+    const { siteId } = req.params;
+
+    try {
+        const [result] = await db.query("DELETE FROM site WHERE site_id = ?", [
+            siteId,
+        ]);
+        if (result.affectedRows > 0) {
+            return res.status(200).json({ message: "사이트 삭제 성공" });
+        } else {
+            return res
+                .status(404)
+                .json({ message: "사이트를 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("사이트 삭제 중 오류:", error);
+        return res.status(500).json({ message: "사이트 삭제 중 오류" });
     }
 });
 
