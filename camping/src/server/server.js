@@ -246,6 +246,58 @@ app.get("/camp_details/:id", async (req, res) => {
     }
 });
 
+app.post("/camp_update/:campId", async (req, res) => {
+    const { campId } = req.params;
+    const {
+        camp_name,
+        camp_type,
+        camp_address,
+        Information,
+        facility,
+        environment,
+        start_manner,
+        over_manner,
+        contact,
+        introduction,
+        check_in_time,
+        check_out_time,
+    } = req.body;
+
+    try {
+        const [result] = await db.query(
+            "UPDATE camp SET camp_name = ?, camp_type = ?, camp_address = ?, Information = ?, facility = ?, environment = ?, start_manner = ?, over_manner = ?, contact = ?, introduction = ?, check_in_time = ?, check_out_time = ? WHERE camp_id = ?",
+            [
+                camp_name,
+                camp_type,
+                camp_address,
+                Information,
+                facility,
+                environment,
+                start_manner,
+                over_manner,
+                contact,
+                introduction,
+                check_in_time,
+                check_out_time,
+                campId,
+            ]
+        );
+
+        if (result.affectedRows > 0) {
+            return res
+                .status(200)
+                .json({ message: "캠프 정보가 업데이트되었습니다." });
+        } else {
+            return res
+                .status(404)
+                .json({ message: "캠프를 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("캠프 정보 업데이트 에러:", error);
+        return res.status(500).json({ message: "캠프 정보 업데이트 에러" });
+    }
+});
+
 app.put("/site_update/:siteId", async (req, res) => {
     const { siteId } = req.params;
     const { price, capacity } = req.body;
@@ -338,14 +390,13 @@ app.get("/camps", async (req, res) => {
     }
 });
 
-app.get("/camps_view/:userId", async (req, res) => {
-    const { userId } = req.params;
+app.get("/camps_view", async (req, res) => {
+    const { host_id } = req.query;
 
     try {
         const [rows] = await db.query("SELECT * FROM camp WHERE host_id = ?", [
-            userId,
+            host_id,
         ]);
-
         return res.status(200).json(rows);
     } catch (error) {
         console.error("캠프 정보 조회 에러:", error);
