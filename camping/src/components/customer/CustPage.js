@@ -26,9 +26,32 @@ function CustPage() {
     }, [userId]);
 
     const handleReviewClick = (bookingId) => {
-        navigate(`/write_review/${bookingId}`);
+        navigate(`/review/${bookingId}`);
     };
 
+    const handleCancelClick = async (bookingId) => {
+        try {
+            await axios.put(`http://localhost:8080/bookings/${bookingId}`, {
+                book_status: "예약취소",
+            });
+
+            setBookings((prevBookings) => {
+                return prevBookings.map((booking) => {
+                    if (booking.book_id === bookingId) {
+                        return {
+                            ...booking,
+                            book_status: "예약취소",
+                        };
+                    }
+                    return booking;
+                });
+            });
+            alert("예약이 취소되었습니다.");
+        } catch (error) {
+            alert("예약 취소 중 오류가 발생했습니다.");
+            console.error("Error cancelling booking:", error);
+        }
+    };
 
     return (
         <div className="container">
@@ -39,13 +62,45 @@ function CustPage() {
                 {bookings.length > 0 ? (
                     bookings.map((booking) => (
                         <div key={booking.book_id} className="booking">
-                            <p><strong>예약 ID:</strong> {booking.book_id}</p>
-                            <p><strong>캠핑장 ID:</strong> {booking.camp_id}</p>
-                            <p><strong>체크인:</strong> {booking.check_in_date}</p>
-                            <p><strong>체크아웃:</strong> {booking.check_out_date}</p>
-                            <p><strong>상태:</strong> {booking.book_status}</p>
-                            <button onClick={() => handleReviewClick(booking.book_id)}>Review</button>
-                            <button >예약 취소</button>
+                            <p>
+                                <strong>예약 ID:</strong> {booking.book_id}
+                            </p>
+                            <p>
+                                <strong>캠핑장 ID:</strong> {booking.camp_id}
+                            </p>
+                            <p>
+                                <strong>체크인:</strong> {booking.check_in_date}
+                            </p>
+                            <p>
+                                <strong>체크아웃:</strong>{" "}
+                                {booking.check_out_date}
+                            </p>
+                            <p>
+                                <strong>상태:</strong> {booking.book_status}
+                            </p>
+                            {booking.book_status === "예약대기" ? (
+                                <button
+                                    onClick={() =>
+                                        handleCancelClick(booking.book_id)
+                                    }
+                                >
+                                    예약 취소
+                                </button>
+                            ) : booking.book_status === "예약종료" ? (
+                                <button
+                                    onClick={() =>
+                                        handleReviewClick(booking.book_id)
+                                    }
+                                >
+                                    리뷰 작성
+                                </button>
+                            ) : (
+                                <button disabled>
+                                    {booking.book_status === "예약취소"
+                                        ? "예약 취소됨"
+                                        : "예약 확정"}
+                                </button>
+                            )}
                         </div>
                     ))
                 ) : (

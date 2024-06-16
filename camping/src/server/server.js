@@ -148,6 +148,29 @@ app.get("/bookings/:userId", async (req, res) => {
     }
 });
 
+app.put("/bookings/:bookingId", async (req, res) => {
+    const { bookingId } = req.params;
+    const { book_status } = req.body;
+
+    try {
+        const [result] = await db.query(
+            "UPDATE book SET book_status = ? WHERE book_id = ?",
+            [book_status, bookingId]
+        );
+
+        if (result.affectedRows > 0) {
+            return res.status(200).json({ message: "예약 상태 업데이트 성공" });
+        } else {
+            return res
+                .status(404)
+                .json({ message: "예약을 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("Error updating booking:", error);
+        return res.status(500).json({ message: "예약 업데이트 중 오류 발생" });
+    }
+});
+
 app.post("/camp_register", upload.array("images", 10), async (req, res) => {
     const {
         host_id,
