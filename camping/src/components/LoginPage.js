@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./css/login.css"
 
 function LoginPage() {
     const [user_id, setId] = useState("");
@@ -54,12 +55,12 @@ function LoginPage() {
                         onChange={(e) => setPw(e.target.value)}
                     />
                     <button type="submit" style={{ color: "black" }}>
-                        sign_in
+                        로그인
                     </button>
                 </form>
                 <p className="message">
                     <button onClick={handleRegister} style={{ color: "black" }}>
-                        sign_up_page
+                        회원가입
                     </button>
                 </p>
             </div>
