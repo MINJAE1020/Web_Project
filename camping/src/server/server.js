@@ -139,6 +139,22 @@ app.get("/camp_details", async (req, res) => {
     }
 });
 
+app.get("/camp_details/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query("SELECT * FROM camp WHERE camp_id = ?", [id]);
+        if (rows.length > 0) {
+            return res.status(200).json(rows[0]);
+        } else {
+            return res.status(404).json({ message: "캠핑장을 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("캠핑장 상세 정보 조회 에러:", error);
+        return res.status(500).json({ message: "캠핑장 상세 정보 조회 에러" });
+    }
+});
+
+
 app.get("/camps", async (req, res) => {
     const { host_id } = req.query;
 
