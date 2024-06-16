@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function SiteRegisterDetailPage({ userId, campId }) {
+function SiteRegisterDetailPage() {
     const [price, setPrice] = useState("");
     const [capacity, setCapacity] = useState("");
     const [image, setImage] = useState(null);
     const navigate = useNavigate();
+    const { campId } = useParams();
 
     const handleImageChange = (e) => {
         setImage(e.target.files[0]);
@@ -16,7 +17,6 @@ function SiteRegisterDetailPage({ userId, campId }) {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("host_id", userId);
         formData.append("camp_id", campId);
         formData.append("price", price);
         formData.append("capacity", capacity);
@@ -45,7 +45,6 @@ function SiteRegisterDetailPage({ userId, campId }) {
     return (
         <div>
             <h1>사이트 등록 상세 페이지</h1>
-            <h2>호스트 ID: {userId}</h2>
             <h2>캠핑장 ID: {campId}</h2>
             <form onSubmit={handleSubmit}>
                 <label>

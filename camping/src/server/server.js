@@ -175,13 +175,14 @@ app.get("/camps", async (req, res) => {
     }
 });
 
-app.post("/site_register_detail", async (req, res) => {
-    const { camp_id, price, capacity, img_url } = req.body;
+app.post("/site_register_detail", upload.single("image"), async (req, res) => {
+    const { camp_id, price, capacity } = req.body;
+    const image = req.file ? req.file.path : null;
 
     try {
         await db.query(
             "INSERT INTO site (camp_id, price, capacity, img_url) VALUES (?, ?, ?, ?)",
-            [camp_id, price, capacity, img_url]
+            [camp_id, price, capacity, image]
         );
         return res.status(201).json({ message: "사이트 등록 성공" });
     } catch (error) {

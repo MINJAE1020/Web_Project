@@ -23,8 +23,9 @@ const App = () => {
                 <Route path="/cust" element={<CustPage />} />
                 <Route path="/camp_register" element={<CampRegisterPage />} />
                 <Route path="/site_register" element={<SiteRegisterPage />} />
+                \{" "}
                 <Route
-                    path="/site_register_detail/:camp_id"
+                    path="/site_register_detail/:campId"
                     element={<SiteRegisterDetailPage />}
                 />
                 <Route path="/book_approve" element={<BookApprove />} />
