@@ -5,14 +5,26 @@ import "./css/campBookPage.css";
 
 function CampBookPage() {
     const { camp_id } = useParams();
+    const navigate = useNavigate();
+    const userId = localStorage.getItem("user_id");
+
     const [campsite, setCampsite] = useState(null);
     const [adults, setAdults] = useState(0);
     const [children, setChildren] = useState(0);
     const [check_in_date, setCheckInDate] = useState("");
     const [check_out_date, setCheckOutDate] = useState("");
     const [book_status, setBookStatus] = useState("예약대기");
-    const navigate = useNavigate();
-    const userId = localStorage.getItem("user_id");
+
+    useEffect(() => {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const formattedToday = today.toISOString().split("T")[0];
+        const formattedTomorrow = tomorrow.toISOString().split("T")[0];
+        setCheckInDate(formattedToday);
+        setCheckOutDate(formattedTomorrow);
+    }, []);
 
     useEffect(() => {
         const fetchCampsite = async () => {
@@ -26,39 +38,25 @@ function CampBookPage() {
             }
         };
 
-        fetchCampsite();
+        if (camp_id) {
+            fetchCampsite();
+        }
     }, [camp_id]);
-
-    useEffect(() => {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        const formattedToday = today.toISOString().split("T")[0];
-        const formattedTomorrow = tomorrow.toISOString().split("T")[0];
-        setCheckInDate(formattedToday);
-        setCheckOutDate(formattedTomorrow);
-    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        const checkInDateString = new Date(check_in_date)
-            .toISOString()
-            .split("T")[0];
-        const checkOutDateString = new Date(check_out_date)
-            .toISOString()
-            .split("T")[0];
 
         const newBooking = {
             cust_id: userId,
             camp_id: campsite.camp_id,
             adults,
             children,
-            check_in_date: checkInDateString,
-            check_out_date: checkOutDateString,
+            check_in_date,
+            check_out_date,
             book_status,
         };
+
+        console.log("새 예약 데이터:", newBooking);
 
         try {
             const response = await axios.post(
