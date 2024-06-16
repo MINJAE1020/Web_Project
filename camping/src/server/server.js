@@ -85,6 +85,69 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+app.post("/booking", async (req, res) => {
+    const {
+        cust_id,
+        camp_id,
+        adults,
+        children,
+        check_in_date,
+        check_out_date,
+        book_status,
+    } = req.body;
+
+    try {
+        // Check if the camp exists
+        const [campRows] = await db.query(
+            "SELECT * FROM camp WHERE camp_id = ?",
+            [camp_id]
+        );
+
+        if (campRows.length === 0) {
+            return res
+                .status(404)
+                .json({ message: "캠핑장을 찾을 수 없습니다." });
+        }
+
+        // Insert booking into the database
+        await db.query(
+            "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+                cust_id,
+                camp_id,
+                adults,
+                children,
+                check_in_date,
+                check_out_date,
+                book_status,
+            ]
+        );
+
+        return res
+            .status(201)
+            .json({ message: "예약이 성공적으로 완료되었습니다." });
+    } catch (error) {
+        console.error("예약 처리 중 오류 발생:", error);
+        return res
+            .status(500)
+            .json({ message: "예약을 처리하는 중 오류가 발생했습니다." });
+    }
+});
+
+app.get("/bookings/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const [rows] = await db.query("SELECT * FROM book WHERE cust_id = ?", [
+            userId,
+        ]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+
 app.post("/camp_register", upload.array("images", 10), async (req, res) => {
     const {
         host_id,
