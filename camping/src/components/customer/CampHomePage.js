@@ -10,27 +10,23 @@ function CampHomePage() {
     const [checkInDate, setCheckInDate] = useState("");
     const [checkOutDate, setCheckOutDate] = useState("");
     const [filteredCampsites, setFilteredCampsites] = useState([]);
+    const [camps, setCamps] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchCampsites();
+        axios
+            .get(`http://localhost:8080/camp_details`)
+            .then((response) => {
+                setCamps(response.data);
+            })
+            .catch((error) => {
+                console.error("캠프 정보를 가져오는 데 실패했습니다:", error);
+            });
     }, []);
-
-    const fetchCampsites = async () => {
-        try {
-            const response = await axios.get(
-                "http://localhost:8080/api/campsites"
-            );
-            setFilteredCampsites(response.data);
-        } catch (error) {
-            console.error("Error fetching campsites:", error);
-        }
-    };
-
     const handleSearch = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8080/api/campsites"
+                "http://localhost:8080/camp_details"
             );
             const filtered = response.data.filter(
                 (campsite) =>

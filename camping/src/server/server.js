@@ -129,6 +129,16 @@ app.post("/camp_register", upload.array("images", 10), async (req, res) => {
     }
 });
 
+app.get("/camp_details", async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT * FROM camp");
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("캠프 상세 정보 조회 에러:", error);
+        return res.status(500).json({ message: "캠프 상세 정보 조회 에러" });
+    }
+});
+
 app.get("/camps", async (req, res) => {
     const { host_id } = req.query;
 
