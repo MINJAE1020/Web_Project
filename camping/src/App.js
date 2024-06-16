@@ -12,7 +12,7 @@ import BookApprove from "./components/host/BookApprove";
 import HostPage from "./components/host/HostPage";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
-import ReviewPage from "./components/ReviewPage";
+import ReviewPage from "./components/customer/ReviewPage";
 
 const App = () => {
     return (
