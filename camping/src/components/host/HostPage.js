@@ -40,6 +40,12 @@ function HostPage() {
             >
                 Site Register
             </button>
+            <button
+                style={buttonStyle}
+                onClick={() => navigate("/site_controller")}
+            >
+                Site Controller
+            </button>
         </div>
     );
 }
