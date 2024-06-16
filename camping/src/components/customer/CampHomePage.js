@@ -14,20 +14,24 @@ function CampHomePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log("캠핑장 데이터를 요청합니다...");
         axios
             .get(`http://localhost:8080/camp_details`)
             .then((response) => {
+                console.log("캠핑장 데이터 응답:", response.data);
                 setCamps(response.data);
+                setFilteredCampsites(response.data); // 초기 데이터를 전체 캠핑장 리스트로 설정
             })
             .catch((error) => {
                 console.error("캠프 정보를 가져오는 데 실패했습니다:", error);
             });
     }, []);
+
     const handleSearch = async () => {
         try {
-            const response = await axios.get(
-                "http://localhost:8080/camp_details"
-            );
+            console.log("캠핑장 데이터를 필터링합니다...");
+            const response = await axios.get("http://localhost:8080/camp_details");
+            console.log("필터링 전 캠프 데이터:", response.data);
             const filtered = response.data.filter(
                 (campsite) =>
                     campsite.camp_name
@@ -42,9 +46,10 @@ function CampHomePage() {
                         checkOutDate === "" ||
                         checkInDate <= checkOutDate)
             );
+            console.log("필터링 후 캠프 데이터:", filtered);
             setFilteredCampsites(filtered);
         } catch (error) {
-            console.error("Error filtering campsites:", error);
+            console.error("캠핑장 데이터를 필터링하는 중 오류 발생:", error);
         }
     };
 
@@ -125,21 +130,19 @@ function CampHomePage() {
                 </button>
             </div>
             <ul className="campsite-list">
+                {console.log("렌더링할 캠프 데이터:", filteredCampsites)}
                 {filteredCampsites.map((campsite) => (
                     <li key={campsite.camp_id} className="campsite-item">
                         <div className="campsite-info">
                             <h3>{campsite.camp_name}</h3>
                             <p>
-                                <strong>Address:</strong>{" "}
-                                {campsite.camp_address}
+                                <strong>Address:</strong> {campsite.camp_address}
                             </p>
                             <p>
                                 <strong>Contact:</strong> {campsite.contact}
                             </p>
                         </div>
-                        <button onClick={() => goToDetailPage(campsite)}>
-                            상세정보
-                        </button>
+                        <button onClick={() => goToDetailPage(campsite)}>상세정보</button>
                     </li>
                 ))}
             </ul>
