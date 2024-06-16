@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function SiteRegisterDetailPage({ campId }) {
+function SiteRegisterDetailPage() {
     const [price, setPrice] = useState("");
     const [capacity, setCapacity] = useState("");
     const [image, setImage] = useState(null);
     const navigate = useNavigate();
+    const { campId } = useParams();
 
     const handleImageChange = (e) => {
         setImage(e.target.files[0]);
