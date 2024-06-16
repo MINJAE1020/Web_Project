@@ -149,6 +149,21 @@ app.get("/camps", async (req, res) => {
     }
 });
 
+app.post("/site_register_detail", async (req, res) => {
+    const { camp_id, price, capacity, img_url } = req.body;
+
+    try {
+        await db.query(
+            "INSERT INTO site (camp_id, price, capacity, img_url) VALUES (?, ?, ?, ?)",
+            [camp_id, price, capacity, img_url]
+        );
+        return res.status(201).json({ message: "사이트 등록 성공" });
+    } catch (error) {
+        console.error("사이트 등록 에러:", error);
+        return res.status(500).json({ message: "사이트 등록 에러" });
+    }
+});
+
 app.listen(port, () => {
     console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });

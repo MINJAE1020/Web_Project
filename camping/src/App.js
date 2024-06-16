@@ -6,6 +6,7 @@ import CampBookPage from "./components/customer/CampBookPage";
 import CampDetailPage from "./components/customer/CampDetailPage";
 import CampRegisterPage from "./components/host/CampRegisterPage";
 import SiteRegisterPage from "./components/host/SiteRegisterPage";
+import SiteRegisterDetailPage from "./components/host/SiteRegisterDetailPage";
 import BookApprove from "./components/host/BookApprove";
 import HostPage from "./components/host/HostPage";
 import LoginPage from "./components/LoginPage";
@@ -22,6 +23,10 @@ const App = () => {
                 <Route path="/cust" element={<CustPage />} />
                 <Route path="/camp_register" element={<CampRegisterPage />} />
                 <Route path="/site_register" element={<SiteRegisterPage />} />
+                <Route
+                    path="/site_register_detail/:camp_id"
+                    element={<SiteRegisterDetailPage />}
+                />
                 <Route path="/book_approve" element={<BookApprove />} />
                 <Route path="/host" element={<HostPage />} />
                 <Route path="/" element={<LoginPage />} />

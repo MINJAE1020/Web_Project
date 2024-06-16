@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 function SiteRegisterPage() {
@@ -24,14 +25,16 @@ function SiteRegisterPage() {
     return (
         <div>
             <h1>사이트 등록 페이지</h1>
-            <h2>사용자 ID: {userId}</h2>
-            <h3>사용자와 관련된 캠프 정보:</h3>
+            <h2>호스트 ID: {userId}</h2>
+            <h3>호스트와 관련된 캠핑장 정보:</h3>
             <ul>
                 {camps.map((camp) => (
                     <li key={camp.camp_id}>
-                        <p>캠프 ID: {camp.camp_id}</p>
-                        <p>캠프 이름: {camp.camp_name}</p>
-                        <p>캠프 주소: {camp.camp_address}</p>
+                        <Link to={`/site_register_detail/${camp.camp_id}`}>
+                            <p>캠핑장 ID: {camp.camp_id}</p>
+                        </Link>
+                        <p>캠핑장 이름: {camp.camp_name}</p>
+                        <p>캠핑장 주소: {camp.camp_address}</p>
                         <p>연락처: {camp.contact}</p>
                     </li>
                 ))}
