@@ -17,7 +17,6 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
 
-// 정적 파일 제공
 app.use("/uploads", express.static(uploadDir));
 
 const storage = multer.diskStorage({
@@ -132,7 +131,6 @@ app.post("/camp_register", upload.array("images", 10), async (req, res) => {
     }
 });
 
-////////////////////////////////////////camp_home, detail, book
 app.get("/camp_details", async (req, res) => {
     try {
         const [rows] = await db.query("SELECT * FROM camp");
@@ -159,6 +157,33 @@ app.get("/camp_details/:id", async (req, res) => {
     } catch (error) {
         console.error("캠핑장 상세 정보 조회 에러:", error);
         return res.status(500).json({ message: "캠핑장 상세 정보 조회 에러" });
+    }
+});
+
+app.put("/site_update/:siteId", async (req, res) => {
+    const { siteId } = req.params;
+    const { price, capacity } = req.body;
+
+    try {
+        const [result] = await db.query(
+            "UPDATE site SET price = ?, capacity = ? WHERE site_id = ?",
+            [price, capacity, siteId]
+        );
+
+        if (result.affectedRows > 0) {
+            return res
+                .status(200)
+                .json({ message: "사이트 정보 업데이트 성공" });
+        } else {
+            return res
+                .status(404)
+                .json({ message: "사이트를 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("사이트 정보 업데이트 중 오류:", error);
+        return res
+            .status(500)
+            .json({ message: "사이트 정보 업데이트 중 오류" });
     }
 });
 

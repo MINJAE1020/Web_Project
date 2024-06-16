@@ -7,6 +7,8 @@ function SiteRegisterDetailPage() {
     const [capacity, setCapacity] = useState("");
     const [image, setImage] = useState(null);
     const [sites, setSites] = useState([]);
+    const [editMode, setEditMode] = useState(false);
+    const [editSiteId, setEditSiteId] = useState(null);
     const navigate = useNavigate();
     const { campId } = useParams();
 
@@ -74,11 +76,51 @@ function SiteRegisterDetailPage() {
         }
     };
 
+    const handleEdit = (siteId) => {
+        const siteToEdit = sites.find((site) => site.site_id === siteId);
+        if (siteToEdit) {
+            setEditSiteId(siteId);
+            setPrice(siteToEdit.price);
+            setCapacity(siteToEdit.capacity);
+            setEditMode(true);
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditMode(false);
+        setEditSiteId(null);
+        setPrice("");
+        setCapacity("");
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.put(
+                `http://localhost:8080/site_update/${editSiteId}`,
+                {
+                    price,
+                    capacity,
+                }
+            );
+            alert(response.data.message);
+            fetchSites();
+            setEditMode(false);
+            setEditSiteId(null);
+            setPrice("");
+            setCapacity("");
+        } catch (error) {
+            console.error("사이트 수정 중 오류 발생:", error);
+            alert("사이트 수정 중 오류 발생");
+        }
+    };
+
     return (
         <div>
             <h1>사이트 등록 상세 페이지</h1>
             <h2>캠핑장 ID: {campId}</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={editMode ? handleUpdate : handleSubmit}>
                 <label>
                     가격:
                     <input
@@ -102,7 +144,16 @@ function SiteRegisterDetailPage() {
                     <input type="file" onChange={handleImageChange} />
                 </label>
                 <br />
-                <button type="submit">사이트 정보 등록</button>
+                {editMode ? (
+                    <>
+                        <button type="submit">사이트 정보 수정</button>
+                        <button type="button" onClick={handleCancelEdit}>
+                            취소
+                        </button>
+                    </>
+                ) : (
+                    <button type="submit">사이트 정보 등록</button>
+                )}
             </form>
             <h2>등록된 사이트 목록</h2>
             {sites.length === 0 ? (
@@ -111,14 +162,19 @@ function SiteRegisterDetailPage() {
                 <ul>
                     {sites.map((site) => (
                         <li key={site.site_id}>
-                            <p>가격: {site.price}</p>
-                            <p>수용 인원: {site.capacity}</p>
+                            <p>사이트 ID: {site.site_id}</p>
+                            <p>가격: {site.price} 원</p>
+                            <p>수용 인원: {site.capacity} 명</p>
                             {site.img_url && (
                                 <img
                                     src={`http://localhost:8080${site.img_url}`}
                                     alt="Site"
+                                    style={{ width: "150px", height: "150px" }}
                                 />
                             )}
+                            <button onClick={() => handleEdit(site.site_id)}>
+                                수정
+                            </button>
                             <button onClick={() => handleDelete(site.site_id)}>
                                 삭제
                             </button>
