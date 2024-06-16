@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { sampleCampsites } from "./campData";
 import "./css/campBookPage.css";
 
 function CampBookPage() {
     const { camp_id } = useParams();
-    const campsite = sampleCampsites.find(
-        (camp) => camp.camp_id === parseInt(camp_id)
-    );
-
+    const [campsite, setCampsite] = useState(null);
     const [user_id, setUserId] = useState("user1"); // Example user_id
     const [adults, setAdults] = useState(0);
     const [children, setChildren] = useState(0);
@@ -17,6 +13,19 @@ function CampBookPage() {
     const [check_out_date, setCheckOutDate] = useState("");
     const [book_status, setBookStatus] = useState("예약대기");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCampsite = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/camp_details/${camp_id}`);
+                setCampsite(response.data);
+            } catch (error) {
+                console.error("Error fetching campsite:", error);
+            }
+        };
+
+        fetchCampsite();
+    }, [camp_id]);
 
     useEffect(() => {
         const today = new Date();
@@ -31,7 +40,7 @@ function CampBookPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
         const newBooking = {
             book_id: `B${Date.now()}`,
             user_id,
@@ -42,22 +51,23 @@ function CampBookPage() {
             check_out_date,
             book_status,
         };
-
+    
         try {
             const response = await axios.post(
-                "http://localhost:8080/api/bookings",
+                "http://localhost:8080/booking",
                 newBooking
             );
             console.log("서버 응답:", response.data);
-
+    
             alert("예약이 성공적으로 완료되었습니다.");
-
+    
             navigate("/cust");
         } catch (error) {
             console.error("예약 처리 중 오류 발생:", error);
             alert("예약을 처리하는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     };
+    
 
     if (!campsite) {
         return <div>캠핑장을 찾을 수 없습니다.</div>;
