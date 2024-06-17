@@ -77,6 +77,7 @@ const CustPage = () => {
     return (
         <div className="container">
             <h1 className="header">{userId}님, My Page</h1>
+            <button onClick={() => navigate("/camp_home")}>Home</button>
             <div className="toggle-buttons">
                 <button onClick={toggleShowBookings}>내 예약</button>
                 <button onClick={toggleShowReviews}>내 리뷰</button>
