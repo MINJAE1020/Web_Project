@@ -14,19 +14,10 @@ function CampBookPage() {
     const [campsite, setCampsite] = useState(null);
     const [adults, setAdults] = useState(0);
     const [children, setChildren] = useState(0);
-    const [check_in_date, setCheckInDate] = useState(new Date()); // 시작 날짜 상태
-    const [check_out_date, setCheckOutDate] = useState(new Date()); // 종료 날짜 상태
+    const [check_in_date, setCheckInDate] = useState();
+    const [check_out_date, setCheckOutDate] = useState(); 
     const [bookings, setBookings] = useState([]);
     const [blockedDates, setBlockedDates] = useState([]);
-
-    useEffect(() => {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        setCheckInDate(today); // 시작 날짜를 오늘로 설정
-        setCheckOutDate(tomorrow); // 종료 날짜를 내일로 설정
-    }, []);
 
     useEffect(() => {
         const fetchCampsite = async () => {
