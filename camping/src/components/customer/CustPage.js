@@ -26,7 +26,17 @@ function CustPage() {
     }, [userId]);
 
     const handleReviewClick = (bookingId) => {
-        navigate(`/review/${bookingId}`);
+        const booking = bookings.find(
+            (booking) => booking.book_id === bookingId
+        );
+        if (booking) {
+            navigate(`/review/${bookingId}`, {
+                state: {
+                    campId: booking.camp_id,
+                    userId: userId,
+                },
+            });
+        }
     };
 
     const handleCancelClick = async (bookingId) => {
