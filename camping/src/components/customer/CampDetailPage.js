@@ -74,6 +74,21 @@ function CampDetailPage() {
           <h2>매너타임</h2>
           <p>시작: {campsite.start_manner}, 종료: {campsite.over_manner}</p>
         </div>
+        {/* <div className="reviews">
+                    <h2>리뷰</h2>
+                    {reviews.length > 0 ? (
+                        reviews.map((review) => (
+                            <div key={review.review_id} className="review">
+                                <p>
+                                    <strong>고객 ID:</strong> {review.user_id}
+                                </p>
+                                <p>{review.comments}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>등록된 리뷰가 없습니다.</p>
+                    )}
+                </div> */}
         <button onClick={handleBookClick}>예약하기</button>
       </div>
     </div>
