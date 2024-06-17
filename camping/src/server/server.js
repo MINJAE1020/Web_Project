@@ -210,6 +210,19 @@ app.put("/bookings/:bookingId", async (req, res) => {
     }
 });
 
+app.get("/get_booking/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query("SELECT * FROM book WHERE camp_id = ?", [
+            id,
+        ]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+
 app.post("/camp_register", upload.array("images", 10), async (req, res) => {
     const {
         host_id,
@@ -376,36 +389,37 @@ app.post("/booking", async (req, res) => {
     } = req.body;
 
     try {
-        const insertQuery =
-            "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        const values = [
-            cust_id,
-            camp_id,
-            adults,
-            children,
-            check_in_date,
-            check_out_date,
-            book_status,
-        ];
-
-        db.query(insertQuery, values, (err, result) => {
-            if (err) {
-                console.error("예약 등록 중 오류:", err);
-                return res
-                    .status(500)
-                    .json({ message: "예약 등록 중 오류가 발생했습니다." });
-            }
-
-            console.log("예약이 성공적으로 등록되었습니다.");
+        const [campRows] = await db.query(
+            "SELECT * FROM camp WHERE camp_id = ?",
+            [camp_id]
+        );
+        if (campRows.length === 0) {
             return res
-                .status(201)
-                .json({ message: "예약이 성공적으로 등록되었습니다." });
-        });
+                .status(404)
+                .json({ message: "캠핑장을 찾을 수 없습니다." });
+        }
+
+        await db.query(
+            "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+                cust_id,
+                camp_id,
+                adults,
+                children,
+                check_in_date,
+                check_out_date,
+                book_status,
+            ]
+        );
+
+        return res
+            .status(201)
+            .json({ message: "예약이 성공적으로 완료되었습니다." });
     } catch (error) {
-        console.error("예약 등록 중 오류:", error);
+        console.error("예약 처리 중 오류 발생:", error);
         return res
             .status(500)
-            .json({ message: "예약 등록 중 오류가 발생했습니다." });
+            .json({ message: "예약을 처리하는 중 오류가 발생했습니다." });
     }
 });
 
