@@ -9,42 +9,65 @@ function CampDetailPage() {
   const [campsite, setCampsite] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     const fetchCampsite = async () => {
-        try {
-          const response = await axios.get(`http://localhost:8080/camp_details/${id}`);
-          setCampsite(response.data);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error fetching campsite:", error);
-          setError(error.message);
-          setIsLoading(false);
-        }
-      };
+      try {
+        const response = await axios.get(`http://localhost:8080/camp_details/${id}`);
+        setCampsite(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching campsite:", error);
+        setError(error.message);
+        setIsLoading(false);
+      }
+    };
+
     fetchCampsite();
   }, [id]);
 
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        // Check if campsite is null or not before fetching reviews
+        if (campsite) {
+          const reviewsResponse = await axios.get(`http://localhost:8080/review/${campsite.camp_id}`);
+          setReviews(reviewsResponse.data);
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [campsite]);
+
   const handleBookClick = () => {
     if (campsite) {
-      console.log("Navigating to booking page for camp ID:", campsite.camp_id); // 예약 버튼 클릭 확인
+      console.log("Navigating to booking page for camp ID:", campsite.camp_id);
       navigate(`/camp_book/${campsite.camp_id}`);
     }
   };
 
   if (isLoading) {
-    console.log("Loading state..."); // 로딩 상태 확인
-    return <div>Loading...</div>;
+    return <div className="container">Loading...</div>;
   }
 
   if (error) {
-    console.log("Error state:", error); // 에러 상태 확인
-    return <div>Error: {error}</div>;
+    return (
+      <div className="container">
+        <div>Error: {error}</div>
+      </div>
+    );
   }
 
   if (!campsite) {
-    console.log("No campsite found for ID:", id); // 캠프 데이터를 찾지 못한 경우 확인
-    return <div>캠핑장을 찾을 수 없습니다.</div>;
+    return (
+      <div className="container">
+        <div>캠핑장을 찾을 수 없습니다.</div>
+      </div>
+    );
   }
 
   return (
@@ -74,21 +97,19 @@ function CampDetailPage() {
           <h2>매너타임</h2>
           <p>시작: {campsite.start_manner}, 종료: {campsite.over_manner}</p>
         </div>
-        {/* <div className="reviews">
-                    <h2>리뷰</h2>
-                    {reviews.length > 0 ? (
-                        reviews.map((review) => (
-                            <div key={review.review_id} className="review">
-                                <p>
-                                    <strong>고객 ID:</strong> {review.user_id}
-                                </p>
-                                <p>{review.comments}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>등록된 리뷰가 없습니다.</p>
-                    )}
-                </div> */}
+        <div className="reviews">
+          <h2>리뷰</h2>
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <div key={review.review_id} className="review">
+                <p><strong>고객 ID:</strong> {review.cust_id}</p>
+                <p>{review.comments}</p>
+              </div>
+            ))
+          ) : (
+            <p>등록된 리뷰가 없습니다.</p>
+          )}
+        </div>
         <button onClick={handleBookClick}>예약하기</button>
       </div>
     </div>
