@@ -173,7 +173,6 @@ app.post("/booking", async (req, res) => {
     }
 });
 
-
 // GET /get_bookList 엔드포인트
 app.get("/get_bookList", async (req, res) => {
     try {
@@ -184,7 +183,6 @@ app.get("/get_bookList", async (req, res) => {
         return res.status(500).json({ message: "캠프 예약조회 에러" });
     }
 });
-
 
 app.get("/bookings/:userId", async (req, res) => {
     const { userId } = req.params;
@@ -204,9 +202,10 @@ app.get("/reviews/:userId", async (req, res) => {
     const { userId } = req.params;
 
     try {
-        const [rows] = await db.query("SELECT * FROM review WHERE cust_id = ?", [
-            userId,
-        ]);
+        const [rows] = await db.query(
+            "SELECT * FROM review WHERE cust_id = ?",
+            [userId]
+        );
         return res.status(200).json(rows);
     } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -216,9 +215,10 @@ app.get("/reviews/:userId", async (req, res) => {
 app.get("/review/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const [rows] = await db.query("SELECT * FROM review WHERE camp_id = ?", [
-            id,
-        ]);
+        const [rows] = await db.query(
+            "SELECT * FROM review WHERE camp_id = ?",
+            [id]
+        );
         return res.status(200).json(rows);
     } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -600,7 +600,7 @@ app.post("/reviews", upload.single("image"), async (req, res) => {
         let imageUrl = null;
 
         if (image) {
-            imageUrl = `/uploads/reviews/${image.filename}`;
+            imageUrl = `/uploads/${image.filename}`;
         }
 
         const insertQuery = `
