@@ -566,6 +566,33 @@ app.delete("/site_delete/:siteId", async (req, res) => {
     }
 });
 
+app.post("/reviews", upload.single("image"), async (req, res) => {
+    const { campId, userId, comments } = req.body;
+    console.log(req.body);
+    const image = req.file; // 업로드된 이미지 파일, 없을 수도 있음
+
+    try {
+        let imageUrl = null;
+
+        if (image) {
+            imageUrl = `/uploads/reviews/${image.filename}`;
+        }
+
+        const insertQuery = `
+            INSERT INTO review (camp_id, cust_id, comments, img_url)
+            VALUES (?, ?, ?, ?)
+        `;
+        const insertValues = [campId, userId, comments, imageUrl];
+
+        await db.query(insertQuery, insertValues);
+
+        res.status(201).json({ message: "리뷰가 등록되었습니다." });
+    } catch (error) {
+        console.error("리뷰 등록 오류:", error);
+        res.status(500).json({ error: "리뷰 등록 중 오류가 발생했습니다." });
+    }
+});
+
 app.listen(port, () => {
     console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
