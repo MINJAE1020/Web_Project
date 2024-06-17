@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../css/campRegister.css"
 
 function CampRegisterPage() {
     const navigate = useNavigate();
@@ -117,7 +118,7 @@ function CampRegisterPage() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="campRegister">
             <h1>Camp Register Page</h1>
             <input
                 type="text"

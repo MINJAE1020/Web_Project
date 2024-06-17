@@ -1,95 +1,159 @@
-.container {
-    max-width: 600px;
+/* campBookPage.css */
+
+body {
+    background-color: #f0f2f5;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .container {
+    padding: 30px;
+    max-width: 800px;
     margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-}
-
-.header {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
     text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
     color: #333;
-}
-
-.booking-form {
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  
+  .booking-form {
     display: flex;
     flex-direction: column;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.form-group input {
-    width: 95%;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .form-group label {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .form-group p {
+    font-size: 1em;
+    color: #666;
+  }
+  
+  .personnel-selection {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .personnel-selection h3 {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .personnel-selection label {
+    font-size: 1.2em;
+    color: #666;
+  }
+  
+  .personnel-selection input {
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
+    font-size: 1em;
     border-radius: 5px;
-    transition: border-color 0.3s ease-in-out;
-}
-
-.form-group input:focus {
-    border-color: #007bff;
-}
-.personnel-selection,
-.date-selection {
-    margin-bottom: 15px;
-}
-
-.personnel-selection label,
-.date-selection label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.personnel-selection input,
-.date-selection input {
-    width: calc(50% - 10px);
-    padding: 8px;
-    font-size: 14px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-.date-input {
-    width: calc(50% - 10px);
-}
-
-button {
-    padding: 12px 20px;
-    font-size: 16px;
-    color: #fff;
+    margin-bottom: 10px;
+  }
+  
+  .date-selection {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .date-selection h3 {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .date-selection label {
+    font-size: 1.2em;
+    color: #666;
+  }
+  
+  button {
     background-color: #007bff;
+    color: white;
+    padding: 15px 30px;
     border: none;
     border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-button:hover {
+    display: block;
+    width: fit-content;
+    margin: 40px auto;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  button:hover {
     background-color: #0056b3;
-}
-
-button:focus {
-    outline: none;
-}
-
-@media (max-width: 600px) {
-    .date-input {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
+    transform: scale(1.05);
+  }
+  
+  /* custom-datepicker.css */
+  
+  .custom-datepicker {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .custom-datepicker .red {
+    background-color: #ffcccc !important;
+  }
+  
+  .custom-datepicker .yellow {
+    background-color: #ffffcc !important;
+  }
+  
+  .react-datepicker__day--red, .react-datepicker__day--yellow {
+    border-radius: 50%;
+    color: white;
+  }
+  
+  .react-datepicker__day--red {
+    background-color: #ff6b6b;
+  }
+  
+  .react-datepicker__day--yellow {
+    background-color: #ffe66d;
+  }
+  
