@@ -11,6 +11,7 @@ function CampHomePage() {
     const [checkOutDate, setCheckOutDate] = useState("");
     const [filteredCampsites, setFilteredCampsites] = useState([]);
     const [camps, setCamps] = useState([]);
+    const [bookings, setBookings] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,12 +22,19 @@ function CampHomePage() {
                 console.log("캠핑장 데이터 응답:", response.data);
                 setCamps(response.data);
                 setFilteredCampsites(response.data); // 초기 데이터를 전체 캠핑장 리스트로 설정
+                
+                // 첫 번째 요청 완료 후 두 번째 요청 보내기
+                return axios.get("http://localhost:8080/get_bookList");
+            })
+            .then((response) => {
+                console.log("책 목록 데이터 응답:", response.data);
+                // 책 목록 데이터 처리
             })
             .catch((error) => {
                 console.error("캠프 정보를 가져오는 데 실패했습니다:", error);
             });
     }, []);
-
+    
     const handleSearch = async () => {
         try {
             console.log("캠핑장 데이터를 필터링합니다...");

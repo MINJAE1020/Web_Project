@@ -173,6 +173,19 @@ app.post("/booking", async (req, res) => {
     }
 });
 
+
+// GET /get_bookList 엔드포인트
+app.get("/get_bookList", async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT * FROM book");
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("캠프 예약 조회 에러:", error);
+        return res.status(500).json({ message: "캠프 예약조회 에러" });
+    }
+});
+
+
 app.get("/bookings/:userId", async (req, res) => {
     const { userId } = req.params;
 
