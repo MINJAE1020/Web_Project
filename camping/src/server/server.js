@@ -85,6 +85,47 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+app.get("/view_bookings/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const [rows] = await db.query(
+            `
+            SELECT b.*
+            FROM book b
+            JOIN camp c ON b.camp_id = c.camp_id
+            WHERE c.host_id = ?
+            AND b.book_status = '예약대기'
+            `,
+            [userId]
+        );
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+
+app.put("/update_booking_status/:bookingId", async (req, res) => {
+    const { bookingId } = req.params;
+    const { status } = req.body;
+    try {
+        const updateQuery = `
+            UPDATE book
+            SET book_status = ?
+            WHERE book_id = ?
+        `;
+        await db.query(updateQuery, [status, bookingId]);
+
+        res.status(200).json({ message: "예약 상태가 업데이트되었습니다." });
+    } catch (error) {
+        console.error("예약 상태 업데이트 중 오류 발생:", error);
+        res.status(500).json({
+            error: "서버 오류: 예약 상태를 업데이트할 수 없습니다.",
+        });
+    }
+});
+
 app.post("/booking", async (req, res) => {
     const {
         cust_id,
@@ -97,7 +138,6 @@ app.post("/booking", async (req, res) => {
     } = req.body;
 
     try {
-        // Check if the camp exists
         const [campRows] = await db.query(
             "SELECT * FROM camp WHERE camp_id = ?",
             [camp_id]
@@ -109,7 +149,6 @@ app.post("/booking", async (req, res) => {
                 .json({ message: "캠핑장을 찾을 수 없습니다." });
         }
 
-        // Insert booking into the database
         await db.query(
             "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
@@ -207,7 +246,7 @@ app.post("/camp_register", upload.array("images", 10), async (req, res) => {
                 introduction,
                 check_in_time,
                 check_out_time,
-                imagePaths.join(","), // Store image paths as a comma-separated string
+                imagePaths.join(","),
             ]
         );
         return res.status(201).json({ message: "캠프 등록 성공" });
