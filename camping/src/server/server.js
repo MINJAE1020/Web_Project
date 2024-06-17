@@ -85,6 +85,47 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+app.get("/view_bookings/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const [rows] = await db.query(
+            `
+            SELECT b.*
+            FROM book b
+            JOIN camp c ON b.camp_id = c.camp_id
+            WHERE c.host_id = ?
+            AND b.book_status = '예약대기'
+            `,
+            [userId]
+        );
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+
+app.put("/update_booking_status/:bookingId", async (req, res) => {
+    const { bookingId } = req.params;
+    const { status } = req.body;
+    try {
+        const updateQuery = `
+            UPDATE book
+            SET book_status = ?
+            WHERE book_id = ?
+        `;
+        await db.query(updateQuery, [status, bookingId]);
+
+        res.status(200).json({ message: "예약 상태가 업데이트되었습니다." });
+    } catch (error) {
+        console.error("예약 상태 업데이트 중 오류 발생:", error);
+        res.status(500).json({
+            error: "서버 오류: 예약 상태를 업데이트할 수 없습니다.",
+        });
+    }
+});
+
 app.post("/booking", async (req, res) => {
     const {
         cust_id,
@@ -97,7 +138,6 @@ app.post("/booking", async (req, res) => {
     } = req.body;
 
     try {
-        // Check if the camp exists
         const [campRows] = await db.query(
             "SELECT * FROM camp WHERE camp_id = ?",
             [camp_id]
@@ -109,7 +149,6 @@ app.post("/booking", async (req, res) => {
                 .json({ message: "캠핑장을 찾을 수 없습니다." });
         }
 
-        // Insert booking into the database
         await db.query(
             "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
@@ -171,6 +210,19 @@ app.put("/bookings/:bookingId", async (req, res) => {
     }
 });
 
+app.get("/get_booking/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query("SELECT * FROM book WHERE camp_id = ?", [
+            id,
+        ]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+
 app.post("/camp_register", upload.array("images", 10), async (req, res) => {
     const {
         host_id,
@@ -207,7 +259,7 @@ app.post("/camp_register", upload.array("images", 10), async (req, res) => {
                 introduction,
                 check_in_time,
                 check_out_time,
-                imagePaths.join(","), // Store image paths as a comma-separated string
+                imagePaths.join(","),
             ]
         );
         return res.status(201).json({ message: "캠프 등록 성공" });
@@ -243,6 +295,58 @@ app.get("/camp_details/:id", async (req, res) => {
     } catch (error) {
         console.error("캠핑장 상세 정보 조회 에러:", error);
         return res.status(500).json({ message: "캠핑장 상세 정보 조회 에러" });
+    }
+});
+
+app.post("/camp_update/:campId", async (req, res) => {
+    const { campId } = req.params;
+    const {
+        camp_name,
+        camp_type,
+        camp_address,
+        Information,
+        facility,
+        environment,
+        start_manner,
+        over_manner,
+        contact,
+        introduction,
+        check_in_time,
+        check_out_time,
+    } = req.body;
+
+    try {
+        const [result] = await db.query(
+            "UPDATE camp SET camp_name = ?, camp_type = ?, camp_address = ?, Information = ?, facility = ?, environment = ?, start_manner = ?, over_manner = ?, contact = ?, introduction = ?, check_in_time = ?, check_out_time = ? WHERE camp_id = ?",
+            [
+                camp_name,
+                camp_type,
+                camp_address,
+                Information,
+                facility,
+                environment,
+                start_manner,
+                over_manner,
+                contact,
+                introduction,
+                check_in_time,
+                check_out_time,
+                campId,
+            ]
+        );
+
+        if (result.affectedRows > 0) {
+            return res
+                .status(200)
+                .json({ message: "캠프 정보가 업데이트되었습니다." });
+        } else {
+            return res
+                .status(404)
+                .json({ message: "캠프를 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("캠프 정보 업데이트 에러:", error);
+        return res.status(500).json({ message: "캠프 정보 업데이트 에러" });
     }
 });
 
@@ -285,36 +389,37 @@ app.post("/booking", async (req, res) => {
     } = req.body;
 
     try {
-        const insertQuery =
-            "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        const values = [
-            cust_id,
-            camp_id,
-            adults,
-            children,
-            check_in_date,
-            check_out_date,
-            book_status,
-        ];
-
-        db.query(insertQuery, values, (err, result) => {
-            if (err) {
-                console.error("예약 등록 중 오류:", err);
-                return res
-                    .status(500)
-                    .json({ message: "예약 등록 중 오류가 발생했습니다." });
-            }
-
-            console.log("예약이 성공적으로 등록되었습니다.");
+        const [campRows] = await db.query(
+            "SELECT * FROM camp WHERE camp_id = ?",
+            [camp_id]
+        );
+        if (campRows.length === 0) {
             return res
-                .status(201)
-                .json({ message: "예약이 성공적으로 등록되었습니다." });
-        });
+                .status(404)
+                .json({ message: "캠핑장을 찾을 수 없습니다." });
+        }
+
+        await db.query(
+            "INSERT INTO book (cust_id, camp_id, adults, children, check_in_date, check_out_date, book_status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+                cust_id,
+                camp_id,
+                adults,
+                children,
+                check_in_date,
+                check_out_date,
+                book_status,
+            ]
+        );
+
+        return res
+            .status(201)
+            .json({ message: "예약이 성공적으로 완료되었습니다." });
     } catch (error) {
-        console.error("예약 등록 중 오류:", error);
+        console.error("예약 처리 중 오류 발생:", error);
         return res
             .status(500)
-            .json({ message: "예약 등록 중 오류가 발생했습니다." });
+            .json({ message: "예약을 처리하는 중 오류가 발생했습니다." });
     }
 });
 
@@ -338,14 +443,13 @@ app.get("/camps", async (req, res) => {
     }
 });
 
-app.get("/camps_view/:userId", async (req, res) => {
-    const { userId } = req.params;
+app.get("/camps_view", async (req, res) => {
+    const { host_id } = req.query;
 
     try {
         const [rows] = await db.query("SELECT * FROM camp WHERE host_id = ?", [
-            userId,
+            host_id,
         ]);
-
         return res.status(200).json(rows);
     } catch (error) {
         console.error("캠프 정보 조회 에러:", error);

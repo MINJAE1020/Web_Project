@@ -5,13 +5,14 @@ import CustPage from "./components/customer/CustPage";
 import CampBookPage from "./components/customer/CampBookPage";
 import CampDetailPage from "./components/customer/CampDetailPage";
 import CampRegisterPage from "./components/host/CampRegisterPage";
+import CampUpdatePage from "./components/host/CampUpdatePage";
 import SiteRegisterPage from "./components/host/SiteRegisterPage";
 import SiteRegisterDetailPage from "./components/host/SiteRegisterDetailPage";
 import BookApprove from "./components/host/BookApprove";
 import HostPage from "./components/host/HostPage";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
-import ReviewPage from "./components/ReviewPage";
+import ReviewPage from "./components/customer/ReviewPage";
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Route path="/camp_book/:camp_id" element={<CampBookPage />} />
                 <Route path="/cust" element={<CustPage />} />
                 <Route path="/camp_register" element={<CampRegisterPage />} />
+                <Route path="/camp_update" element={<CampUpdatePage />} />
                 <Route
                     path="/site_register"
                     element={<SiteRegisterPage />}
