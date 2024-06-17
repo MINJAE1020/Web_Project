@@ -58,21 +58,7 @@ function CampDetailPage() {
             <h1 className="header">{campsite.camp_name}</h1>
             <div className="campsite-detail">
                 <div className="main-image">
-                    <Carousel showThumbs={false} showArrows={true}>
-                        {campsite.img_url.split(",").map((imageUrl, index) => (
-                            <div key={index}>
-                                <img
-                                    src={`http://localhost:8080${imageUrl.trim()}`}
-                                    alt={`Image ${index + 1}`}
-                                    style={{
-                                        width: "150px",
-                                        height: "150px",
-                                        objectFit: "contain", // 이미지 비율 유지
-                                    }}
-                                />
-                            </div>
-                        ))}
-                    </Carousel>
+                    <img src={campsite.img_url} alt={campsite.camp_name} />
                 </div>
                 <div className="description">
                     <h2>소개</h2>

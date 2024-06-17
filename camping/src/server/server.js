@@ -200,6 +200,32 @@ app.get("/bookings/:userId", async (req, res) => {
     }
 });
 
+app.get("/reviews/:userId", async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const [rows] = await db.query("SELECT * FROM review WHERE cust_id = ?", [
+            userId,
+        ]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+app.get("/review/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query("SELECT * FROM review WHERE camp_id = ?", [
+            id,
+        ]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Error fetching bookings" });
+    }
+});
+
 app.put("/bookings/:bookingId", async (req, res) => {
     const { bookingId } = req.params;
     const { book_status } = req.body;
@@ -568,7 +594,6 @@ app.delete("/site_delete/:siteId", async (req, res) => {
 
 app.post("/reviews", upload.single("image"), async (req, res) => {
     const { campId, userId, comments } = req.body;
-    console.log(req.body);
     const image = req.file; // 업로드된 이미지 파일, 없을 수도 있음
 
     try {
